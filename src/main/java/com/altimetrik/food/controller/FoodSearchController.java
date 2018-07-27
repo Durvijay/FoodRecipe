@@ -15,7 +15,6 @@ public class FoodSearchController {
 	
 	FoodSearchRestClient restClient=new FoodSearchRestClient();
 
-	@ExceptionHandler(ResourceNotFoundException.class)
 	@RequestMapping(value="/search", method = RequestMethod.GET)
 	public Object foodsearch(@RequestParam String mealName) {
 			Recipe mealresponse = restClient.createRestRequestForReciepe(mealName, "&q=" + mealName, HttpMethod.GET);
