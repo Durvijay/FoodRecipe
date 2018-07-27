@@ -32,9 +32,9 @@ public class FoodSearchController {
 	
 	@RequestMapping(value="/search", method = RequestMethod.GET)
 	public List<IngredientInfo> foodsearch(@RequestParam String mealName) throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-		Recipe mealrespnse = foodSearchRestClient.getRestRequestForReciepe(mealName, "&q="+mealName, HttpMethod.GET);
-		if (mealrespnse!=null) {
-			Object obj = mealrespnse.getHits().get(0);
+		Recipe mealResponse = foodSearchRestClient.getRestRequestForReciepe(mealName, "&q="+mealName, HttpMethod.GET);
+		if (mealResponse!=null && !mealResponse.getHits().isEmpty()) {
+			Object obj = mealResponse.getHits().get(0);
 			HashMap<String, Object> test = (HashMap<String, Object>) obj;
 			ObjectMapper objectMapper = new ObjectMapper();
 			HashMap<String, Object> test1 = (HashMap<String, Object>) test.get("recipe");
@@ -73,13 +73,13 @@ public class FoodSearchController {
 	}
 	
 	public Calories getIngredientNutrient(Ingredient ingredient) throws JsonParseException, JsonMappingException, JsonProcessingException, IOException {
-		HashMap<String, Object> mealrespnse = (HashMap<String, Object>) nutritionalRestClient.getNutritionalValueOfIngredient(ingredient, HttpMethod.POST);
-		if(mealrespnse!=null) {
-			List<Object> obj = (List<Object>) mealrespnse.get("foods");
+		HashMap<String, Object> ingredientResponse = (HashMap<String, Object>) nutritionalRestClient.getNutritionalValueOfIngredient(ingredient, HttpMethod.POST);
+		if (ingredientResponse!=null && ingredientResponse.get("foods") != null) {
+			List<Object> obj = (List<Object>) ingredientResponse.get("foods");
 			ObjectMapper objectMapper = new ObjectMapper();
 			Calories calories = objectMapper.readValue(objectMapper.writeValueAsString(obj.get(0)), Calories.class);
 			return calories;	
-		}else {
+		} else {
 			throw new ResourceNotFoundException("Ingredients Not Found");
 		}
 	}

@@ -19,7 +19,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 @AutoConfigureMockMvc
 public class FoodSearchControllerTest {
 
-    private final String SAMPLE_MEAL = "chicken";
+    private final String SAMPLE_MEAL = "noodles";
     private final String INVALID_MEAL = "invalid";
 
     @Autowired
@@ -36,6 +36,30 @@ public class FoodSearchControllerTest {
     @Test
     public void getFoodSearchUnsuccessfully() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/food/search?mealName=" + INVALID_MEAL).accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void getCompleteNutrientValueSuccessfully() throws Exception {
+    	mvc.perform(MockMvcRequestBuilders.get("/food/nutrient?mealName=" + SAMPLE_MEAL).accept(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(content().string(containsString("nf_calories")))
+        .andExpect(content().string(containsString("nf_total_fat")))
+        .andExpect(content().string(containsString("nf_saturated_fat")))
+        .andExpect(content().string(containsString("nf_cholesterol")))
+        .andExpect(content().string(containsString("nf_sodium")))
+        .andExpect(content().string(containsString("nf_total_carbohydrate")))
+        .andExpect(content().string(containsString("nf_dietary_fiber")))
+        .andExpect(content().string(containsString("nf_sugars")))
+        .andExpect(content().string(containsString("nf_protein")))
+        .andExpect(content().string(containsString("nf_potassium")))
+        .andExpect(content().string(containsString("nf_p")))
+        .andExpect(content().string(containsString("serving_weight_grams")));
+    }
+    
+    @Test
+    public void getCompleteNutrientValueUnsuccessfully() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.get("/food/nutrient?mealName=" + INVALID_MEAL).accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
 
