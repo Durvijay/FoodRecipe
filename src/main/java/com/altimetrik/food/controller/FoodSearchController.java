@@ -18,7 +18,11 @@ import com.altimetrik.food.bean.IngredientInfo;
 import com.altimetrik.food.bean.Recipe;
 import com.altimetrik.food.client.FoodSearchRestClient;
 import com.altimetrik.food.client.NutritionalRestClient;
+import com.altimetrik.food.exception.ResourceNotFoundException;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 @RestController
@@ -85,11 +89,11 @@ public class FoodSearchController {
 	@SuppressWarnings("unchecked")
 	public Calories getIngredientNutrient(Ingredient ingredient) {
 		try {
-			HashMap<String, Object> mealrespnse = (HashMap<String, Object>) nutritionalRestClient
+			HashMap<String, Object> mealResponse = (HashMap<String, Object>) nutritionalRestClient
 					.getNutritionalValueOfIngredient(ingredient, HttpMethod.POST);
 
-			if (mealrespnse != null) {
-				List<Object> obj = (List<Object>) mealrespnse.get("foods");
+			if (mealResponse != null  && mealResponse.get("foods") != null) {
+				List<Object> obj = (List<Object>) mealResponse.get("foods");
 				ObjectMapper objectMapper = new ObjectMapper();
 				Calories calories;
 				calories = objectMapper.readValue(objectMapper.writeValueAsString(obj.get(0)), Calories.class);
