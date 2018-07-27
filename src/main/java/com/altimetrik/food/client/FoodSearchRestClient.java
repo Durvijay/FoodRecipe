@@ -7,30 +7,18 @@ import org.springframework.web.client.RestTemplate;
 
 import com.altimetrik.food.bean.Recipe;
 
-
 public class FoodSearchRestClient {
 	static String URL = "https://api.edamam.com/search?app_id=21125b03&app_key=f28f37b59bb5d3f40e35bc60b8c68aec";
 
-	public Recipe createRestRequestForReciepe(String mealName, String urlappend, HttpMethod requestType) {
+	public Recipe getRestRequestForReciepe(String mealName, String urlappend, HttpMethod requestType) {
 		RestTemplate restTemplate = new RestTemplate();
-		System.out.println(URL+urlappend);
-		ResponseEntity<Recipe> responseEntity = restTemplate.exchange(URL+urlappend, requestType, null, Recipe.class);
-		
+		System.out.println(URL + urlappend);
+		ResponseEntity<Recipe> responseEntity = restTemplate.exchange(URL + urlappend, requestType, null, Recipe.class);
+
 		if (responseEntity.getStatusCode() == HttpStatus.OK) {
 			return responseEntity.getBody();
 		} else {
 			return null;
 		}
 	}
-	
-	/*public List<Customer> getRestRequestCustomers(String urlappend,HttpMethod requestType) {
-		RestTemplate restTemplate = new RestTemplate();
-		ResponseEntity<List<Customer>> responseEntity = restTemplate.exchange(URL+urlappend, requestType, null, new ParameterizedTypeReference<List<Customer>>() {});
-		if (responseEntity.getStatusCode() == HttpStatus.OK) {
-			return responseEntity.getBody();
-		} else {
-			return null;
-		}
-	}*/
-	
-	}
+}
