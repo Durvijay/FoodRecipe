@@ -1,6 +1,5 @@
 package com.altimetrik.food.bean;
 
-import java.util.HashMap;
 import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
